@@ -35,12 +35,12 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'davidcelis/vim-ariake-dark'
 Plugin 'scrooloose/nerdtree'
-Plugin 'neoclide/coc.nvim', { 'branch': 'master', 'do': 'yarn install --frozen-lockfile' }
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'frazrepo/vim-rainbow'
-
+Plugin 'neoclide/coc.nvim'
+Plugin 'arcticicestudio/nord-vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -50,12 +50,15 @@ filetype plugin indent on    " required
 "
 " Brief help
 " :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginInstall    - installs plugins; append `!` to inoremap <silent><expr> <TAB>"
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+
+
+
 filetype plugin indent on
 set encoding=utf-8
 set nocompatible
@@ -66,14 +69,12 @@ syntax on
 set number
 set noshowmode
 set termencoding=utf-8
-highlight LspCxxHlSymField guifg=#E06C75
-highlight LspCxxHlSymNamespace guifg=#E06C75
+set termguicolors
 set t_Co=256
 
 "Theme
-
 colorscheme Ariake-Dark
-set background=dark
+""colorscheme nord
 
 set mouse=a
 set mousehide 
@@ -87,6 +88,7 @@ set fileformat=unix
 filetype indent on
 set nowrap
 set history=50
+set updatetime=300
 
 "double content
 inoremap { {}
@@ -108,6 +110,7 @@ let g:airline_section_z = "\ue0a1:%l/%L Col:%c" "Кастомная графа �
 let g:Powerline_symbols='unicode' "Поддержка unicode
 let g:airline#extensions#xkblayout#enabled = 0 "Про это позже расскажу
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 "FilesTree
 map <C-n> :NERDTreeToggle<CR>
@@ -116,17 +119,15 @@ map <C-n> :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
-"auto
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"                        
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-"work with windows
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-
 "git in vim 
 let g:NERDTreeGitStatusUntrackedFilesMode = 'all'
 let g:NERDTreeGitStatusShowIgnored = 1 " a heavy feature may cost much more time. default: 0
+let g:GitGutterLineHighlightsEnable = 1
+let g:gitgutter_sign_added = '++'
+let g:gitgutter_sign_modified = '~~'
+let g:gitgutter_sign_removed = '--'
+let g:gitgutter_sign_removed_first_line = '^^'
+let g:gitgutter_sign_modified_removed = '~_'
 
 "Rainbow 
 au FileType c,cpp,objc,objcpp call rainbow#load()
@@ -139,3 +140,17 @@ let g:rainbow_load_separately = [
 
 let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
 let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
+
+"use <tab> for trigger completion and navigate to the next complete item
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+
+let g:airline#extensions#coc#enamled = 1
+autocmd CursorHold * silent call CocActionAsync('highlight')
