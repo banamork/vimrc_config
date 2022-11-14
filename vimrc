@@ -33,14 +33,14 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'xolox/vim-misc'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'davidcelis/vim-ariake-dark'
 Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'frazrepo/vim-rainbow'
 Plugin 'neoclide/coc.nvim'
-Plugin 'arcticicestudio/nord-vim'
+Plugin 'joshdick/onedark.vim'
+Plugin 'sheerun/vim-polyglot'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -59,22 +59,20 @@ filetype plugin indent on    " required
 
 
 
-filetype plugin indent on
 set encoding=utf-8
 set nocompatible
 set noswapfile
 set nobackup
-set visualbell t_vb=
 syntax on
 set number
-set noshowmode
 set termencoding=utf-8
-set termguicolors
 set t_Co=256
+set vb t_vb=
+
 
 "Theme
-colorscheme Ariake-Dark
-""colorscheme nord
+colorscheme onedark
+
 
 set mouse=a
 set mousehide 
@@ -85,10 +83,11 @@ set shiftwidth=4
 set expandtab
 set autoindent
 set fileformat=unix
-filetype indent on
 set nowrap
 set history=50
 set updatetime=300
+set hidden
+
 
 "double content
 inoremap { {}
@@ -105,7 +104,7 @@ inoremap ' ''<Left>
 "statusbar
 let g:airline_powerline_fonts = 1 "Включить поддержку Powerline шрифтов
 let g:airline#extensions#keymap#enabled = 0 "Не показывать текущий маппинг
-let g:airline_theme='deus'
+let g:airline_theme='onedark'
 let g:airline_section_z = "\ue0a1:%l/%L Col:%c" "Кастомная графа положения курсора
 let g:Powerline_symbols='unicode' "Поддержка unicode
 let g:airline#extensions#xkblayout#enabled = 0 "Про это позже расскажу
@@ -151,6 +150,18 @@ inoremap <silent><expr> <Tab>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 
 let g:airline#extensions#coc#enamled = 1
 autocmd CursorHold * silent call CocActionAsync('highlight')
+set signcolumn=yes
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
