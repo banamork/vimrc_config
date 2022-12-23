@@ -1,4 +1,4 @@
-""Banamork vim config""
+"Banamork vim config""
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -37,10 +37,13 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'frazrepo/vim-rainbow'
 Plugin 'neoclide/coc.nvim'
+Plugin 'frazrepo/vim-rainbow'
 Plugin 'joshdick/onedark.vim'
 Plugin 'sheerun/vim-polyglot'
+Plugin 'jiangmiao/auto-pairs'
+
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -57,8 +60,6 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-
-
 set encoding=utf-8
 set nocompatible
 set noswapfile
@@ -72,7 +73,7 @@ set vb t_vb=
 
 "Theme
 colorscheme onedark
-
+hi Normal ctermbg=NONE
 
 set mouse=a
 set mousehide 
@@ -88,18 +89,23 @@ set history=50
 set updatetime=300
 set hidden
 
+"for tab in coc.nvim 
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-"double content
-inoremap { {}
-inoremap ( ()
-inoremap [ []
-inoremap " ""
-inoremap ' ''
-inoremap { {}<Left><Enter><Enter><Up><Tab>
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap " ""<Left>
-inoremap ' ''<Left>
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 
 "statusbar
 let g:airline_powerline_fonts = 1 "Включить поддержку Powerline шрифтов
@@ -134,34 +140,9 @@ let g:rainbow_load_separately = [
     \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
     \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.c' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
     \ ]
 
 let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
 let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
-
-"use <tab> for trigger completion and navigate to the next complete item
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
-
-let g:airline#extensions#coc#enamled = 1
-autocmd CursorHold * silent call CocActionAsync('highlight')
-set signcolumn=yes
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
