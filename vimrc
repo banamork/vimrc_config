@@ -42,6 +42,7 @@ Plugin 'frazrepo/vim-rainbow'
 Plugin 'joshdick/onedark.vim'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 
 
