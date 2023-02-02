@@ -39,12 +39,11 @@ Plugin 'ryanoasis/vim-devicons'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'neoclide/coc.nvim'
 Plugin 'frazrepo/vim-rainbow'
-Plugin 'joshdick/onedark.vim'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-
+Plugin 'morhetz/gruvbox'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -73,8 +72,7 @@ set vb t_vb=
 
 
 "Theme
-colorscheme onedark
-hi Normal ctermbg=NONE
+colorscheme gruvbox
 
 set mouse=a
 set mousehide 
@@ -111,7 +109,7 @@ endfunction
 "statusbar
 let g:airline_powerline_fonts = 1 "Включить поддержку Powerline шрифтов
 let g:airline#extensions#keymap#enabled = 0 "Не показывать текущий маппинг
-let g:airline_theme='onedark'
+let g:airline_theme='gruvbox'
 let g:airline_section_z = "\ue0a1:%l/%L Col:%c" "Кастомная графа положения курсора
 let g:Powerline_symbols='unicode' "Поддержка unicode
 let g:airline#extensions#xkblayout#enabled = 0 "Про это позже расскажу
