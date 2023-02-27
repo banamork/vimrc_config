@@ -1,13 +1,10 @@
-"Banamork vim config""
+"Giora vim config""
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
@@ -34,32 +31,19 @@ Plugin 'xolox/vim-misc'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'scrooloose/nerdtree'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ryanoasis/vim-devicons'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'neoclide/coc.nvim'
 Plugin 'frazrepo/vim-rainbow'
-Plugin 'sheerun/vim-polyglot'
 Plugin 'jiangmiao/auto-pairs'
-Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
-
 Plugin 'morhetz/gruvbox'
+Plugin 'sheerun/vim-polyglot'
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to inoremap <silent><expr> <TAB>"
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+call vundle#end()            
+filetype plugin indent on    
 
+"basic
 set encoding=utf-8
 set nocompatible
 set noswapfile
@@ -74,15 +58,16 @@ set vb t_vb=
 "Theme
 colorscheme gruvbox
 
+"for mac
 set mouse=a
 set mousehide 
-set hlsearch
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
 set autoindent
 set fileformat=unix
+set hlsearch
 set nowrap
 set history=50
 set updatetime=300
@@ -112,21 +97,19 @@ let g:airline#extensions#keymap#enabled = 0 "Не показывать теку�
 let g:airline_theme='gruvbox'
 let g:airline_section_z = "\ue0a1:%l/%L Col:%c" "Кастомная графа положения курсора
 let g:Powerline_symbols='unicode' "Поддержка unicode
-let g:airline#extensions#xkblayout#enabled = 0 "Про это позже расскажу
+let g:airline#extensions#xkblayout#enabled = 0 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 "FilesTree
-map <C-n> :NERDTreeToggle<CR>
+map <silent> <C-n> :NERDTreeToggle<CR>
+map <silent> <C-f> :NERDTreeFind<CR>
 
 " Start NERDTree when Vim is started without file arguments.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 "git in vim 
-let g:NERDTreeGitStatusUntrackedFilesMode = 'all'
-let g:NERDTreeGitStatusShowIgnored = 1 " a heavy feature may cost much more time. default: 0
-let g:GitGutterLineHighlightsEnable = 1
 let g:gitgutter_sign_added = '++'
 let g:gitgutter_sign_modified = '~~'
 let g:gitgutter_sign_removed = '--'
